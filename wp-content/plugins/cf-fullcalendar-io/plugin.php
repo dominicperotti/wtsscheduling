@@ -14,7 +14,7 @@
 // Add field type config to caldera forms fields
 // use a function name that is unique of if whithin a class, array($this, 'method_to_use')
 add_filter('caldera_forms_get_field_types', 'fullcal_field_register_function');
-define(FC_URL, plugin_dir_path(__FILE__));
+define('FC_URL', plugin_dir_path(__FILE__));
 /**
  * field type register function to add new field to registered fields array
  *
@@ -59,11 +59,13 @@ function fullcal_field_register_function($fields){
 			"fc-fullcal",
 			"fc-gcal",
 			"fc-custom-ui",
-			"fc-moment-jq"																					// can be a handle to a regstered script or a url
+			"fc-moment-jq",																					// can be a handle to a regstered script or a url
+			"fc-jquery-ui-timepicker"
 		),
 		"styles" => array(	
 			"fc-ui-css",																	// styles array outside of setup are style sheets that are used in the frontend form
-			"fc-fullcal-css"																					// can be a handle to a regstered style or a url
+			"fc-fullcal-css",																					// can be a handle to a regstered style or a url
+			"fc-jquery-ui-timepicker-css"
 		)
 	);
 
@@ -101,23 +103,26 @@ function my_handler_function($value, $field, $form){
 	// return a WP_Error to return and trigger an erro. the error will shown to the user
 	//return new WP_Error( 'error', 'Nope, Sorry. Try again.');
 
-	$value = "THIS IS HANDLER-FAKE $value.";
+	//$value = "THIS IS HANDLER-FAKE $value.";
 	return $value;
 }
 
 function register_fullcal_scripts () {
 	wp_enqueue_style("fc-ui-css", plugins_url("js/lib/cupertino/jquery-ui.min.css", __FILE__), array(), time(), 'all');	
 	wp_enqueue_style("fc-fullcal-css", plugins_url("js/fullcalendar.css", __FILE__), array(), time(), 'all');
-	wp_register_script("fc-custom-ui", plugins_url("js/lib/jquery-ui.custom.min.js", __FILE__), array('jquery'), time(), false);
+	wp_enqueue_style("fc-jquery-ui-timepicker-css", plugins_url("lib/jquery-ui-timepicker-addon.css", __FILE__), array(), time(), 'all');
+	wp_register_script("fc-custom-ui", plugins_url("js/lib/jquery-ui.min.js", __FILE__), array('jquery'), time(), false);
 	wp_register_script("fc-moment-jq", plugins_url("js/lib/moment.min.js", __FILE__), array('jquery'), time(), false);
 	wp_register_script("fc-fullcal", plugins_url("js/fullcalendar.min.js", __FILE__), array('jquery'), time(), false);
 	wp_register_script("fc-gcal", plugins_url("js/gcal.js", __FILE__), array('jquery'), time(), false);
+	wp_register_script("fc-jquery-ui-timepicker", plugins_url("lib/jquery-ui-timepicker-addon.js", __FILE__), array('jquery', 'fc-custom-ui'), time(), false);
 
 
 	wp_enqueue_script('fc-custom-ui');
 	wp_enqueue_script('fc-moment-jq');
 	wp_enqueue_script('fc-fullcal');
 	wp_enqueue_script('fc-gcal');
+	wp_enqueue_script('fc-jquery-ui-timepicker');
 	wp_enqueue_style('fc-fullcal-css');
 }
 
